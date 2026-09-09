@@ -1,0 +1,13 @@
+# Local LLM communication
+ollama
+
+# Retrieval
+sentence-transformers
+rank_bm25
+
+# DB
+# (sqlite3 is stdlib — no package needed)
+
+# Benchmarking / eval
+psutil
+pytest
