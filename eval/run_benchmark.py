@@ -33,7 +33,7 @@ TEST_QUERIES = [
 def run_benchmark(model_name: str):
     print(f"\n--- Running Benchmark for Model: {model_name} ---")
     
-    pipeline = LocalQueryPipeline(model_name=model_name)
+    pipeline = LocalQueryPipeline(db_path='finance.db', model_name=model_name)
     
     results = []
     

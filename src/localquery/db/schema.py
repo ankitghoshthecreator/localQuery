@@ -98,6 +98,24 @@ def get_schema_description():
         "Table: transactions (transaction_id INTEGER, account_id INTEGER, amount DECIMAL, transaction_date DATE, category TEXT, description TEXT). 'category' can be 'groceries', 'utilities', 'entertainment', 'income', or 'rent'."
     ]
 
+def extract_schema_from_db(db_path: str) -> list[str]:
+    """Dynamically extracts the DDL (CREATE TABLE statements) from any SQLite database."""
+    if not os.path.exists(db_path):
+        raise FileNotFoundError(f"Database not found: {db_path}")
+        
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
+    
+    schema_docs = []
+    for row in cursor.fetchall():
+        table_name = row[0]
+        ddl = row[1]
+        schema_docs.append(f"Table: {table_name}\nSchema:\n{ddl}")
+        
+    conn.close()
+    return schema_docs
+
 if __name__ == "__main__":
     setup_db()
     print("Database setup complete.")

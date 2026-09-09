@@ -1,4 +1,6 @@
 import sys
+import glob
+import os
 from localquery.db.schema import setup_db
 from localquery.orchestration.pipeline import LocalQueryPipeline
 
@@ -12,9 +14,29 @@ def main():
     # 1. Ensure Database exists
     setup_db()
     
-    # 2. Initialize Pipeline
+    # 2. Find databases
+    db_files = glob.glob("*.db") + glob.glob("data/*.db")
+    if not db_files:
+        print("No databases found. Run 'python data/generate_dummy_dbs.py'")
+        return
+        
+    print("Available Databases:")
+    for i, db in enumerate(db_files):
+        print(f"[{i+1}] {db}")
+        
+    while True:
+        try:
+            choice = int(input("\nSelect a database number to query: "))
+            if 1 <= choice <= len(db_files):
+                selected_db = db_files[choice-1]
+                break
+        except ValueError:
+            pass
+        print("Invalid choice.")
+    
+    # 3. Initialize Pipeline
     # Defaulting to a smaller model for the CLI by default if not specified
-    pipeline = LocalQueryPipeline(model_name="qwen2.5-coder:3b")
+    pipeline = LocalQueryPipeline(db_path=selected_db, model_name="qwen2.5-coder:3b")
     
     print_header()
     

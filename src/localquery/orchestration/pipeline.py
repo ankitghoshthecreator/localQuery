@@ -4,18 +4,18 @@ from localquery.clarification.engine import ClarificationEngine
 from localquery.retrieval.retriever import HybridRetriever
 from localquery.llm.client import LocalLLMClient
 from localquery.db.executor import DBExecutor
-from localquery.db.schema import get_schema_description
+from localquery.db.schema import extract_schema_from_db
 
 class LocalQueryPipeline:
-    def __init__(self, model_name: str = "qwen2.5-coder:3b"):
+    def __init__(self, db_path: str, model_name: str = "qwen2.5-coder:3b"):
         self.clarification_engine = ClarificationEngine()
         self.retriever = HybridRetriever()
         self.llm_client = LocalLLMClient(model_name=model_name)
-        self.db_executor = DBExecutor()
+        self.db_executor = DBExecutor(db_path=db_path)
         
-        # Initialize and index the schema
-        print("Initializing retriever index...")
-        schema_docs = get_schema_description()
+        # Initialize and index the schema dynamically
+        print(f"Initializing retriever index for {db_path}...")
+        schema_docs = extract_schema_from_db(db_path)
         self.retriever.index(schema_docs)
         print("Pipeline ready.")
 
