@@ -4,10 +4,13 @@ ollama
 # Retrieval
 sentence-transformers
 rank_bm25
+numpy
 
 # DB
-# (sqlite3 is stdlib — no package needed)
+# sqlite3 is part of the Python standard library
 
-# Benchmarking / eval
+# System metrics (for benchmarking)
 psutil
+
+# Testing
 pytest

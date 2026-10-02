@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "localquery"
+version = "1.0.0"
+description = "Privacy-First Text-to-SQL with Hybrid RAG and Clarification Engine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "ollama",
+    "sentence-transformers",
+    "rank_bm25",
+    "psutil",
+    "numpy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-anyio",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
+tmp_path_retention_policy = "failed"
+tmpdir = "D:/LocalQuery/tmp"
